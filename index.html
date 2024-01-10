@@ -8,36 +8,55 @@
     <link rel="manifest" href="manifest.json">
 </head>
 <body>
+    <h1>Welcome to Your Website</h1>
+
+    <!-- Button to manually trigger a push notification -->
+    <button onclick="showPushNotification()">Show Push Notification</button>
+
     <script>
         if ('serviceWorker' in navigator && 'PushManager' in window) {
-            navigator.serviceWorker.register('/service-worker.js')
+        navigator.serviceWorker.register('/service-worker.js')
             .then(function(registration) {
-                console.log('Service Worker registered with scope:', registration.scope);
+            console.log('Service Worker registered with scope:', registration.scope);
             })
             .catch(function(error) {
-                console.error('Error registering Service Worker:', error);
+            console.error('Error registering Service Worker:', error);
             });
 
-            // Request permission for push notifications
-            Notification.requestPermission().then(function(permission) {
+        // Request permission for push notifications
+        Notification.requestPermission().then(function(permission) {
             if (permission === 'granted') {
-                console.log('Permission for push notifications granted');
+            console.log('Permission for push notifications granted');
             } else {
-                console.error('Permission for push notifications denied');
+            console.error('Permission for push notifications denied');
             }
-            });
+        });
 
-            // Subscribe user to push notifications
-            navigator.serviceWorker.ready.then(function(registration) {
+        // Subscribe user to push notifications
+        navigator.serviceWorker.ready.then(function(registration) {
             registration.pushManager.subscribe({ userVisibleOnly: true })
-                .then(function(subscription) {
+            .then(function(subscription) {
                 // Send subscription data to your server
                 console.log('Subscription data:', subscription);
-                })
-                .catch(function(error) {
+            })
+            .catch(function(error) {
                 console.error('Error subscribing to push notifications:', error);
-                });
             });
+        });
+        }
+
+        // Function to show a push notification
+        function showPushNotification() {
+        if (Notification.permission === 'granted') {
+            navigator.serviceWorker.ready.then(function(registration) {
+            registration.showNotification('Manually Triggered Notification', {
+                body: 'This notification was triggered by the button click!',
+                icon: 'icon.png',
+            });
+            });
+        } else {
+            console.error('Permission for push notifications denied');
+        }
         }
     </script>
 </body>
