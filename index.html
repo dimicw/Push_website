@@ -36,7 +36,11 @@
 
                 // Subscribe user to push notifications
                 navigator.serviceWorker.ready.then(function(registration) {
-                    registration.pushManager.subscribe({ userVisibleOnly: true })
+                    registration.pushManager.subscribe(
+                        { 
+                            userVisibleOnly: true,
+                            applicationServerKey: "BIO91Q-0VShinfIKrtZOntCpBr3fvPwHTc6hWiiPn-1lQyj7Kjn8UTrYdZqVVWDqb9MBO_hx-1vj9dr3O-sw14c"
+                        })
                     .then(function(subscription) {
                         // Send subscription data to your server
                         console.log('Subscription data:', subscription);
