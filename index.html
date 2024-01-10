@@ -16,50 +16,50 @@
 
     <script>
         function enablePush() {
-        if ('serviceWorker' in navigator && 'PushManager' in window) {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then(function(registration) {
-                console.log('Service Worker registered with scope:', registration.scope);
-                })
-                .catch(function(error) {
-                console.error('Error registering Service Worker:', error);
+            if ('serviceWorker' in navigator && 'PushManager' in window) {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(function(registration) {
+                        console.log('Service Worker registered with scope:', registration.scope);
+                    })
+                    .catch(function(error) {
+                        console.error('Error registering Service Worker:', error);
+                    });
+
+                // Request permission for push notifications
+                Notification.requestPermission().then(function(permission) {
+                    if (permission === 'granted') {
+                        console.log('Permission for push notifications granted');
+                    } else {
+                        console.error('Permission for push notifications denied');
+                    }
                 });
 
-            // Request permission for push notifications
-            Notification.requestPermission().then(function(permission) {
-                if (permission === 'granted') {
-                console.log('Permission for push notifications granted');
-                } else {
-                console.error('Permission for push notifications denied');
-                }
-            });
-
-            // Subscribe user to push notifications
-            navigator.serviceWorker.ready.then(function(registration) {
-                registration.pushManager.subscribe({ userVisibleOnly: true })
-                .then(function(subscription) {
-                    // Send subscription data to your server
-                    console.log('Subscription data:', subscription);
-                })
-                .catch(function(error) {
-                    console.error('Error subscribing to push notifications:', error);
+                // Subscribe user to push notifications
+                navigator.serviceWorker.ready.then(function(registration) {
+                    registration.pushManager.subscribe({ userVisibleOnly: true })
+                    .then(function(subscription) {
+                        // Send subscription data to your server
+                        console.log('Subscription data:', subscription);
+                    })
+                    .catch(function(error) {
+                        console.error('Error subscribing to push notifications:', error);
+                    });
                 });
-            });
             }
         }
 
         // Function to show a push notification
         function showPushNotification() {
-        if (Notification.permission === 'granted') {
-            navigator.serviceWorker.ready.then(function(registration) {
-            registration.showNotification('Manually Triggered Notification', {
-                body: 'This notification was triggered by the button click!',
-                icon: 'icon.png',
-            });
-            });
-        } else {
-            console.error('Permission for push notifications denied');
-        }
+            if (Notification.permission === 'granted') {
+                navigator.serviceWorker.ready.then(function(registration) {
+                    registration.showNotification('Manually Triggered Notification', {
+                        body: 'This notification was triggered by the button click!',
+                        icon: 'icon.png',
+                    });
+                });
+            } else {
+                console.error('Permission for push notifications denied');
+            }
         }
     </script>
 </body>
