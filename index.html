@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Push-er</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+<body>
+    <script>
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+            navigator.serviceWorker.register('/service-worker.js')
+            .then(function(registration) {
+                console.log('Service Worker registered with scope:', registration.scope);
+            })
+            .catch(function(error) {
+                console.error('Error registering Service Worker:', error);
+            });
+
+            // Request permission for push notifications
+            Notification.requestPermission().then(function(permission) {
+            if (permission === 'granted') {
+                console.log('Permission for push notifications granted');
+            } else {
+                console.error('Permission for push notifications denied');
+            }
+            });
+
+            // Subscribe user to push notifications
+            navigator.serviceWorker.ready.then(function(registration) {
+            registration.pushManager.subscribe({ userVisibleOnly: true })
+                .then(function(subscription) {
+                // Send subscription data to your server
+                console.log('Subscription data:', subscription);
+                })
+                .catch(function(error) {
+                console.error('Error subscribing to push notifications:', error);
+                });
+            });
+        }
+    </script>
+</body>
+<!--<script src="request.js"></script>-->
+</html>
