@@ -1,5 +1,5 @@
 {
-    "name": "Push-er",
+    "name": "Push Notification",
     "short_name": "Push",
     "description": "Website that sends push notification after certain amount of time",
     "start_url": "/",
